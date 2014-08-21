@@ -55,6 +55,11 @@ namespace CheckPCLProfile
     {
         public static string GetProfile(string path)
         {
+            if ( path[0] == '\\' ) 
+                path = Assembly.GetEntryAssembly().Location.Substring(0,2) + path;
+            else if ( path[1] != ':' ) 
+                path = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\" + path;
+
             var asm = System.Reflection.Assembly.LoadFile(path);
             var attr = asm.CustomAttributes.First(
                     a => a.AttributeType == typeof(System.Runtime.Versioning.TargetFrameworkAttribute));
